@@ -3,4 +3,8 @@
     <string name="username_hint">username</string>
     <string name="password_hint">password</string>
     <string name="login_button_text">Log In</string>
+    <string name="title_activity_user_list">UserListActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_groceries">Groceries</string>
+    <string name="title_settings">Settings</string>
 </resources>
