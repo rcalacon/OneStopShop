@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "719878087042",
+    "firebase_url": "https://onestopshop-5a638.firebaseio.com",
+    "project_id": "onestopshop-5a638",
+    "storage_bucket": "onestopshop-5a638.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:719878087042:android:93be13acabd505498fef9b",
+        "android_client_info": {
+          "package_name": "edu.sdsu.cs.android.onestopshop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "719878087042-vvu2bbmjd51r3udsglr5v2oi8c1b72n9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6bhQXrzAhdJT37hV8ZtrDuhXBqOcZzA4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "719878087042-vvu2bbmjd51r3udsglr5v2oi8c1b72n9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
