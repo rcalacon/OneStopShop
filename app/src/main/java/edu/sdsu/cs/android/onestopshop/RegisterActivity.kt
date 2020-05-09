@@ -41,6 +41,11 @@ class RegisterActivity : AppCompatActivity() {
             }
         }
 
+        return_button.setOnClickListener {
+            setResult(Activity.RESULT_OK)
+            finish()
+        }
+
         cancel_button.setOnClickListener {
             setResult(Activity.RESULT_CANCELED)
             finish()
@@ -76,6 +81,8 @@ class RegisterActivity : AppCompatActivity() {
                         db.collection("users")
                             .add(user)
                             .addOnSuccessListener { documentReference ->
+                                registration_in_progress.visibility = View.GONE
+                                registration_complete.visibility = View.VISIBLE
                                 Log.d("RCA", "DocumentSnapshot added with ID: ${documentReference.id}")
                             }
                             .addOnFailureListener { e ->

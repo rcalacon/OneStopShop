@@ -21,8 +21,10 @@
 
     <!-- Registration Activity -->
     <string name="registration_header">Fill in the fields below</string>
+    <string name="registration_complete_header">Registration Complete! Please return to the login page to sign in using your new account.</string>
     <string name="submit_button_text">Submit</string>
     <string name="cancel_button_text">Cancel</string>
+    <string name="return_button_text">Return</string>
     <string name="user_exists_error_message">Username already exists - </string>
     <string name="user_available_message">Username is available - </string>
 
