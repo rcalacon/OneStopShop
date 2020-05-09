@@ -1,14 +1,28 @@
 <resources>
     <string name="app_name">OneStopShop</string>
-    <string name="username_hint">username</string>
-    <string name="password_hint">password</string>
-    <string name="login_button_text">Log In</string>
     <string name="title_activity_user_list">UserListActivity</string>
     <string name="title_home">Home</string>
     <string name="title_groceries">Groceries</string>
     <string name="title_settings">Settings</string>
 
+    <!-- Used to parse grocery file data -->
     <string name="grocery_data_delimiter"> $ </string>
+
+    <!-- Welcome Activity -->
+    <string name="welcome_info">Setting up app for first time use...</string>
+    <string name="welcome_info_complete">Complete!</string>
+    <string name="next_button_text">Next</string>
+
+    <!-- Log in Activity -->
+    <string name="username_hint">username</string>
+    <string name="password_hint">password</string>
+    <string name="login_button_text">Log In</string>
+    <string name="register_button_text">Register</string>
+
+    <!-- Registration Activity -->
+    <string name="registration_header">Fill in the fields below</string>
+    <string name="submit_button_text">Submit</string>
+    <string name="cancel_button_text">Cancel</string>
 
     <!-- Settings Fragment -->
     <string name="reset_data_button_text">Reset Grocery List</string>
