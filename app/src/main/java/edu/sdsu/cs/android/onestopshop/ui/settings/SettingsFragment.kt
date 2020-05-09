@@ -13,6 +13,9 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import edu.sdsu.cs.android.onestopshop.R
 import kotlinx.android.synthetic.main.fragment_settings.*
+import java.io.BufferedReader
+import java.io.File
+import java.io.InputStream
 
 class SettingsFragment : Fragment() {
 
@@ -38,10 +41,22 @@ class SettingsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         reset_button.setOnClickListener {
-            val grocery = hashMapOf(
-                "name" to "eggs"
+            val groceryMap = hashMapOf(
+                "name" to "milk"
             )
-            db.collection("groceries")
+
+            val groceriesInputStream:InputStream = resources.openRawResource(R.raw.groceries)
+            val groceriesBufferedReader:BufferedReader = groceriesInputStream.bufferedReader()
+            var grocery:String? = groceriesBufferedReader.readLine()
+            var numLines:Int = 0
+            while(grocery !== null){
+                //Log.e("RCA", grocery)
+                grocery = groceriesBufferedReader.readLine()
+                numLines++
+            }
+            print(numLines) //TODO - delete duplicate lines in raw resource file.
+            /*
+                db.collection("groceries")
                 .add(grocery)
                 .addOnSuccessListener { documentReference ->
                     Log.d("RCA", "DocumentSnapshot added with ID: ${documentReference.id}")
@@ -49,6 +64,7 @@ class SettingsFragment : Fragment() {
                 .addOnFailureListener { e ->
                     Log.w("RCA", "Error adding document", e)
                 }
+            */
         }
     }
 }
