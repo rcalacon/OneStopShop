@@ -8,6 +8,8 @@
     <string name="title_groceries">Groceries</string>
     <string name="title_settings">Settings</string>
 
+    <string name="grocery_data_delimiter"> $ </string>
+
     <!-- Settings Fragment -->
     <string name="reset_data_button_text">Reset Grocery List</string>
 </resources>

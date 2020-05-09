@@ -14,14 +14,12 @@ import com.google.firebase.ktx.Firebase
 import edu.sdsu.cs.android.onestopshop.R
 import kotlinx.android.synthetic.main.fragment_settings.*
 import java.io.BufferedReader
-import java.io.File
 import java.io.InputStream
 
 class SettingsFragment : Fragment() {
 
     private lateinit var settingsViewModel: SettingsViewModel
-    // Access a Cloud Firestore instance from your Activity
-    val db = Firebase.firestore
+    private val db = Firebase.firestore
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,30 +39,29 @@ class SettingsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         reset_button.setOnClickListener {
-            val groceryMap = hashMapOf(
-                "name" to "milk"
-            )
+            //clear the collection and include a loading ui piece. also lock ability to do anything else.
 
             val groceriesInputStream:InputStream = resources.openRawResource(R.raw.groceries)
             val groceriesBufferedReader:BufferedReader = groceriesInputStream.bufferedReader()
             var grocery:String? = groceriesBufferedReader.readLine()
-            var numLines:Int = 0
+            val groceryIdIndex = 1
+            val groceryNameIndex = 0
             while(grocery !== null){
-                //Log.e("RCA", grocery)
-                grocery = groceriesBufferedReader.readLine()
-                numLines++
-            }
-            print(numLines) //TODO - delete duplicate lines in raw resource file.
-            /*
+                val groceryInfo = grocery.split(getString(R.string.grocery_data_delimiter))
+                val groceryMap = hashMapOf(
+                    "name" to groceryInfo[groceryIdIndex],
+                    "id" to groceryInfo[groceryNameIndex]
+                )
                 db.collection("groceries")
-                .add(grocery)
-                .addOnSuccessListener { documentReference ->
-                    Log.d("RCA", "DocumentSnapshot added with ID: ${documentReference.id}")
+                    .add(groceryMap)
+                    .addOnSuccessListener { documentReference ->
+                        Log.d("RCA", "DocumentSnapshot added with ID: ${documentReference.id}")
+                    }
+                    .addOnFailureListener { e ->
+                        Log.w("RCA", "Error adding document", e)
                 }
-                .addOnFailureListener { e ->
-                    Log.w("RCA", "Error adding document", e)
-                }
-            */
+                grocery = groceriesBufferedReader.readLine()
+            }
         }
     }
 }
