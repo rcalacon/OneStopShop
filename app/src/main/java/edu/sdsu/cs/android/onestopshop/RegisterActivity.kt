@@ -16,8 +16,6 @@ import kotlinx.android.synthetic.main.activity_register.*
 class RegisterActivity : AppCompatActivity() {
 
     private val db = Firebase.firestore
-    private var usernameValid = false
-    private var passwordValid = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,17 +25,19 @@ class RegisterActivity : AppCompatActivity() {
             if(!focus){
                 val userNameField = view as EditText
                 val userNameProvided = userNameField.text.toString()
-                usernameValid = validateUsername(userNameProvided)
+                val usernameValid = validateInput(userNameProvided)
                 if(usernameValid){
-                    checkIfUsernameExists(userNameProvided)
+                    checkIfUsernameExists(userNameProvided, false)
                 }
             }
         }
 
         submit_button.setOnClickListener {
-            //check if both fields are valid
-            if(usernameValid && passwordValid) {
-                Toast.makeText(this, "Registration complete!", Toast.LENGTH_SHORT).show()
+            val providedUsername = username_register_field.text.toString()
+            val providedPassword = password_register_field.text.toString()
+
+            if(validateInput(providedUsername) && validateInput(providedPassword)){
+                checkIfUsernameExists(providedUsername,true)
             }
         }
 
@@ -47,11 +47,11 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-    private fun validateUsername(userInput: String):Boolean{
+    private fun validateInput(userInput: String):Boolean{
         return (userInput !== null && userInput !== "")
     }
 
-    private fun checkIfUsernameExists(userNameProvided:String){
+    private fun checkIfUsernameExists(userNameProvided:String, isRegistering:Boolean){
         db.collection("users")
             .get()
             .addOnSuccessListener { result ->
@@ -68,9 +68,24 @@ class RegisterActivity : AppCompatActivity() {
                     user_status_text.text = getString(R.string.user_exists_error_message) + " " + userNameProvided
                     user_status_text.setTextColor(getColor(R.color.error_text_color))
                 }else {
-                    username_register_field.background = null
-                    user_status_text.text = getString(R.string.user_available_message) + " " + userNameProvided
-                    user_status_text.setTextColor(getColor(R.color.valid_text_color))
+                    if(isRegistering){
+                        val user = hashMapOf(
+                            "username" to userNameProvided,
+                            "password" to password_register_field.text.toString()
+                        )
+                        db.collection("users")
+                            .add(user)
+                            .addOnSuccessListener { documentReference ->
+                                Log.d("RCA", "DocumentSnapshot added with ID: ${documentReference.id}")
+                            }
+                            .addOnFailureListener { e ->
+                                Log.w("RCA", "Error adding document", e)
+                            }
+                    }else{
+                        username_register_field.background = null
+                        user_status_text.text = getString(R.string.user_available_message) + " " + userNameProvided
+                        user_status_text.setTextColor(getColor(R.color.valid_text_color))
+                    }
                 }
             }
             .addOnFailureListener { exception ->
