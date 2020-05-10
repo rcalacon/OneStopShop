@@ -43,6 +43,19 @@
         app:layout_constraintTop_toBottomOf="@+id/username_login_field" />
 
 
+    <ProgressBar
+        android:id="@+id/login_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/button_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/password_login_field"
+        app:layout_constraintVertical_bias="0.426" />
+
     <LinearLayout
         android:id="@+id/button_container"
         style="?android:attr/buttonBarStyle"

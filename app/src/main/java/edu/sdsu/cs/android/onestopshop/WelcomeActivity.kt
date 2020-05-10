@@ -1,5 +1,6 @@
 package edu.sdsu.cs.android.onestopshop
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -79,6 +80,7 @@ class WelcomeActivity : AppCompatActivity() {
                     val loginIntent = LoginActivity.newIntent(this@WelcomeActivity,
                         ArrayList())
                     startActivity(loginIntent)
+                    finish()
                 }
             }
             .addOnFailureListener { exception ->
@@ -89,6 +91,7 @@ class WelcomeActivity : AppCompatActivity() {
             val loginIntent = LoginActivity.newIntent(this@WelcomeActivity,
                 ArrayList())
             startActivity(loginIntent)
+            finish()
         }
     }
 }

@@ -18,6 +18,8 @@
     <string name="password_hint">password</string>
     <string name="login_button_text">Log In</string>
     <string name="register_button_text">Register</string>
+    <string name="auth_fail_text">Incorrect credentials provided. Please try again.</string>
+    <string name="invalid_login_fields">Please fill in all fields.</string>
 
     <!-- Registration Activity -->
     <string name="registration_header">Fill in the fields below</string>
