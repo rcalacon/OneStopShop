@@ -5,4 +5,7 @@
     <color name="colorAccent">#D81B60</color>
     <color name="error_text_color">#bb0000</color>
     <color name="valid_text_color">#00aa00</color>
+
+    <color name="list_background">#bbbbbb</color>
+    <color name="alternate_row_background">#ffffff</color>
 </resources>
