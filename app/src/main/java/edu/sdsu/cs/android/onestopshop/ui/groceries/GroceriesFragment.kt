@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.ktx.firestore
@@ -28,6 +29,8 @@ class GroceriesFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: RecyclerView.Adapter<*>
     private lateinit var viewManager: RecyclerView.LayoutManager
+
+    val args: GroceriesFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,6 +53,23 @@ class GroceriesFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         grocery_list_progress.visibility = View.VISIBLE
         initializeGroceryList()
+
+        add_button.setOnClickListener{
+            //TODO: Fix this ish
+            val groceryEntry = hashMapOf(
+                "owner" to args.username,
+                "name" to (viewAdapter as MyAdapter).selectedGroceryName,
+                "id" to (viewAdapter as MyAdapter).selectedGroceryId
+            )
+            db.collection("items")
+                .add(groceryEntry)
+                .addOnSuccessListener { documentReference ->
+                    Log.d("RCA", "DocumentSnapshot added with ID: ${documentReference.id}")
+                }
+                .addOnFailureListener { e ->
+                    Log.w("RCA", "Error adding document", e)
+                }
+        }
     }
 
     private fun initRecyclerView(recyclerData:ArrayList<HashMap<String,String>>){
@@ -83,20 +103,28 @@ class GroceriesFragment : Fragment() {
             }
     }
 
-    class MyAdapter(private val myDataset: ArrayList<HashMap<String,String>>, val addButton: Button) :
+    class MyAdapter(private val myDataset: ArrayList<HashMap<String,String>>, private val addButton: Button) :
         RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
 
         private val whiteRow:String = "#FFFFFF"
         private val grayRow:String = "#BBBBBB"
         private val selectedRow:String = "#5FD47E"
 
-        var selectedGroceryId:String = ""
-        var selectedGroceryName:String = ""
+        private var currentGroceryId:String = ""
+        private var currentGroceryName:String = ""
 
         private var selectedGroceryTextView:TextView? = null
         private var selectedGroceryOriginalColor:Int = 0
 
         class MyViewHolder(val textView: TextView) : RecyclerView.ViewHolder(textView)
+
+        var selectedGroceryId:String
+            get() = currentGroceryId
+            set(updatedGroceryId) { currentGroceryId = updatedGroceryId }
+
+        var selectedGroceryName:String
+            get() = currentGroceryName
+            set(updatedGroceryName) { currentGroceryName = updatedGroceryName }
 
         override fun onCreateViewHolder(parent: ViewGroup,
                                         viewType: Int): MyAdapter.MyViewHolder {
@@ -129,8 +157,8 @@ class GroceriesFragment : Fragment() {
                 val selectedGroceryOriginalColorDrawable:ColorDrawable = selectedGroceryItem.background as ColorDrawable
                 selectedGroceryOriginalColor = selectedGroceryOriginalColorDrawable.color
 
-                selectedGroceryId = selectedGroceryTextView?.hint.toString()
-                selectedGroceryName = selectedGroceryTextView?.text.toString()
+                currentGroceryId = selectedGroceryTextView?.hint.toString()
+                currentGroceryName = selectedGroceryTextView?.text.toString()
 
                 //highlight newly selected
                 selectedGroceryTextView?.setBackgroundColor(Color.parseColor(selectedRow))
