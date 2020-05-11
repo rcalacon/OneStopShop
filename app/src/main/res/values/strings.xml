@@ -37,6 +37,8 @@
     <string name="add_button_text">Add</string>
     <string name="create_button_text">Create</string>
     <string name="groceries_header">Select an item below</string>
+    <string name="add_grocery_success">Successfully added grocery</string>
+    <string name="add_grocery_fail">Failed to add grocery</string>
 
     <!-- Settings Fragment -->
     <string name="reset_data_button_text">Reset Grocery List</string>

@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -27,7 +28,7 @@ class GroceriesFragment : Fragment() {
     private val db = Firebase.firestore
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var viewAdapter: RecyclerView.Adapter<*>
+    private lateinit var viewAdapter: GroceryListAdapter
     private lateinit var viewManager: RecyclerView.LayoutManager
 
     val args: GroceriesFragmentArgs by navArgs()
@@ -51,30 +52,41 @@ class GroceriesFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        grocery_list_progress.visibility = View.VISIBLE
+        grocery_progress.visibility = View.VISIBLE
         initializeGroceryList()
 
         add_button.setOnClickListener{
-            //TODO: Fix this ish
+            grocery_progress.visibility = View.VISIBLE
             val groceryEntry = hashMapOf(
                 "owner" to args.username,
-                "name" to (viewAdapter as MyAdapter).selectedGroceryName,
-                "id" to (viewAdapter as MyAdapter).selectedGroceryId
+                "name" to viewAdapter.selectedGroceryName,
+                "id" to viewAdapter.selectedGroceryId
             )
             db.collection("items")
                 .add(groceryEntry)
                 .addOnSuccessListener { documentReference ->
-                    Log.d("RCA", "DocumentSnapshot added with ID: ${documentReference.id}")
+                    Toast.makeText(
+                        activity,
+                        (getString(R.string.add_grocery_success) + "\n" + groceryEntry["name"]).toLowerCase(),
+                        Toast.LENGTH_LONG
+                    ).show()
+                    grocery_progress.visibility = View.GONE
+                    viewAdapter.clearSelectedGrocery()
                 }
                 .addOnFailureListener { e ->
-                    Log.w("RCA", "Error adding document", e)
+                    Toast.makeText(
+                        activity,
+                        (getString(R.string.add_grocery_fail) + "\n" + groceryEntry["name"]).toLowerCase(),
+                        Toast.LENGTH_LONG
+                    ).show()
+                    grocery_progress.visibility = View.GONE
                 }
         }
     }
 
     private fun initRecyclerView(recyclerData:ArrayList<HashMap<String,String>>){
         viewManager = LinearLayoutManager(context)
-        viewAdapter = MyAdapter(recyclerData, add_button)
+        viewAdapter = GroceryListAdapter(recyclerData, add_button)
         recyclerView = grocery_list.apply {
             setHasFixedSize(true)
             layoutManager = viewManager
@@ -94,7 +106,7 @@ class GroceriesFragment : Fragment() {
                     recyclerItem["id"] = currentGroceryItem["id"] as String
                     recyclerData.add(recyclerItem)
                 }
-                grocery_list_progress.visibility = View.GONE
+                grocery_progress.visibility = View.GONE
                 initRecyclerView(recyclerData)
             }
             .addOnFailureListener { exception ->
@@ -103,8 +115,8 @@ class GroceriesFragment : Fragment() {
             }
     }
 
-    class MyAdapter(private val myDataset: ArrayList<HashMap<String,String>>, private val addButton: Button) :
-        RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
+    class GroceryListAdapter(private val myDataset: ArrayList<HashMap<String,String>>, private val addButton: Button) :
+        RecyclerView.Adapter<GroceryListAdapter.MyViewHolder>() {
 
         private val whiteRow:String = "#FFFFFF"
         private val grayRow:String = "#BBBBBB"
@@ -127,7 +139,7 @@ class GroceriesFragment : Fragment() {
             set(updatedGroceryName) { currentGroceryName = updatedGroceryName }
 
         override fun onCreateViewHolder(parent: ViewGroup,
-                                        viewType: Int): MyAdapter.MyViewHolder {
+                                        viewType: Int): GroceryListAdapter.MyViewHolder {
             val textView = LayoutInflater.from(parent.context)
                 .inflate(R.layout.grocery_item_text_view, parent, false) as TextView
             return MyViewHolder(textView)
@@ -164,6 +176,18 @@ class GroceriesFragment : Fragment() {
                 selectedGroceryTextView?.setBackgroundColor(Color.parseColor(selectedRow))
 
             }
+        }
+
+        fun clearSelectedGrocery(){
+            currentGroceryId = ""
+            currentGroceryName = ""
+
+            if(selectedGroceryTextView !== null){
+                selectedGroceryTextView?.setBackgroundColor(selectedGroceryOriginalColor)
+                selectedGroceryTextView = null
+            }
+
+            selectedGroceryOriginalColor = 0
         }
 
         override fun getItemCount() = myDataset.size
