@@ -35,6 +35,8 @@ class SettingsFragment : Fragment() {
             textView.text = it
         })
 
+        settingsViewModel.text.value = getString(R.string.title_settings).toLowerCase()
+
         return root
     }
 

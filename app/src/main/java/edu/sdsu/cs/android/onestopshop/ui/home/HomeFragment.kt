@@ -40,12 +40,12 @@ class HomeFragment : Fragment() {
             val username:String? = loginArguments.getString(USER_INTENT_KEY)
             if(username !== null){
                 this.username = username
-                homeViewModel.text.value = getString(R.string.intro) + " " + username
+                homeViewModel.text.value = getString(R.string.intro).toLowerCase() + " " + username.toLowerCase()
             }
         }else if(args !== null){
             val username:String = args.username
             this.username = username
-            homeViewModel.text.value = getString(R.string.intro) + " " + username
+            homeViewModel.text.value = getString(R.string.intro).toLowerCase() + " " + username.toLowerCase()
         }
         return root
     }

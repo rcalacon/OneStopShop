@@ -36,6 +36,7 @@
     <!-- Groceries Fragment -->
     <string name="add_button_text">Add</string>
     <string name="create_button_text">Create</string>
+    <string name="groceries_header">Select an item below</string>
 
     <!-- Settings Fragment -->
     <string name="reset_data_button_text">Reset Grocery List</string>
