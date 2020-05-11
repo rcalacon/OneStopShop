@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.navArgs
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import edu.sdsu.cs.android.onestopshop.R
@@ -33,6 +34,7 @@ class SettingsFragment : Fragment() {
         settingsViewModel.text.observe(this, Observer {
             textView.text = it
         })
+
         return root
     }
 

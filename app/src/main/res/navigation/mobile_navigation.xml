@@ -9,17 +9,47 @@
         android:id="@+id/navigation_home"
         android:name="edu.sdsu.cs.android.onestopshop.ui.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action android:id="@+id/home_to_settings"
+            app:destination="@+id/navigation_settings">
+        </action>
+        <action android:id="@+id/home_to_groceries"
+            app:destination="@+id/navigation_groceries">
+        </action>
+        <argument
+            android:name="username"
+            app:argType="string" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_groceries"
         android:name="edu.sdsu.cs.android.onestopshop.ui.groceries.GroceriesFragment"
         android:label="@string/title_groceries"
-        tools:layout="@layout/fragment_groceries" />
+        tools:layout="@layout/fragment_groceries" >
+        <action android:id="@+id/groceries_to_home"
+            app:destination="@+id/navigation_home">
+        </action>
+        <action android:id="@+id/groceries_to_settings"
+            app:destination="@+id/navigation_settings">
+        </action>
+        <argument
+            android:name="username"
+            app:argType="string" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_settings"
         android:name="edu.sdsu.cs.android.onestopshop.ui.settings.SettingsFragment"
         android:label="@string/title_settings"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_settings" >
+        <action android:id="@+id/settings_to_home"
+            app:destination="@+id/navigation_home">
+        </action>
+        <action android:id="@+id/settings_to_groceries"
+            app:destination="@+id/navigation_groceries">
+        </action>
+        <argument
+            android:name="username"
+            app:argType="string" />
+    </fragment>
 </navigation>

@@ -86,9 +86,8 @@ class LoginActivity : AppCompatActivity() {
                     }
                 }
                 if(credentialsValid){
-                    //TODO: Provide username to bundle
                     val userListIntent = UserListActivity.newIntent(this@LoginActivity,
-                        ArrayList())
+                        userNameProvided)
                     startActivity(userListIntent)
                 }else{
                     Toast.makeText(this, getString(R.string.auth_fail_text), Toast.LENGTH_LONG)

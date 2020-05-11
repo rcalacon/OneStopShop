@@ -5,34 +5,91 @@ import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavGraph
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import edu.sdsu.cs.android.onestopshop.ui.groceries.GroceriesFragment
+import edu.sdsu.cs.android.onestopshop.ui.groceries.GroceriesFragmentDirections
+import edu.sdsu.cs.android.onestopshop.ui.home.HomeFragmentDirections
+import edu.sdsu.cs.android.onestopshop.ui.settings.SettingsFragmentDirections
+import kotlinx.android.synthetic.main.activity_user_list.*
+
+private const val USER_INTENT_KEY:String = "username"
+private const val HOME_NAV_LABEL:String = "Home"
+private const val GROCERIES_NAV_LABEL:String = "Home"
+private const val SETTINGS_NAV_LABEL:String = "Home"
 
 class UserListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_list)
-        val navView: BottomNavigationView = findViewById(R.id.nav_view)
-
+//        val navView: BottomNavigationView = findViewById(R.id.nav_view)
+//
         val navController = findNavController(R.id.nav_host_fragment)
+        navController.setGraph(R.navigation.mobile_navigation, intent.extras)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.navigation_home, R.id.navigation_groceries, R.id.navigation_settings
-            )
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
+//        val appBarConfiguration = AppBarConfiguration(
+//            setOf(
+//                R.id.navigation_home, R.id.navigation_groceries, R.id.navigation_settings
+//            )
+//        )
+//        setupActionBarWithNavController(navController, appBarConfiguration)
+//        navView.setupWithNavController(navController)
+        val username:String? = intent.getStringExtra(USER_INTENT_KEY)
+        if(username !== null){
+            println("hey")
+        }
+
+        home_button.setOnClickListener{
+            val originFragment:String? = navController.currentDestination?.label.toString()
+            if(originFragment !== null && username !== null){
+                if(originFragment == getString(R.string.title_groceries)){
+                    //navController.navigate(R.id.groceries_to_home)
+                    navController.navigate(GroceriesFragmentDirections.groceriesToHome(username))
+                }else if(originFragment == getString(R.string.title_settings)){
+                    //navController.navigate(R.id.settings_to_home)
+                    navController.navigate(SettingsFragmentDirections.settingsToHome(username))
+                }
+            }
+        }
+
+        groceries_button.setOnClickListener{
+            val originFragment:String? = navController.currentDestination?.label.toString()
+            if(originFragment !== null && username !== null){
+                if(originFragment == getString(R.string.title_home)){
+                    //navController.navigate(R.id.home_to_groceries)
+                    navController.navigate(HomeFragmentDirections.homeToGroceries(username))
+                }else if(originFragment == getString(R.string.title_settings)){
+                    //navController.navigate(R.id.settings_to_groceries)
+                    navController.navigate(SettingsFragmentDirections.settingsToGroceries(username))
+                }
+            }
+        }
+
+        settings_button.setOnClickListener{
+            val originFragment:String? = navController.currentDestination?.label.toString()
+            if(originFragment !== null && username !== null){
+                if(originFragment == getString(R.string.title_home)){
+                    //navController.navigate(R.id.home_to_settings)
+                    navController.navigate(HomeFragmentDirections.homeToSettings(username))
+                }else if(originFragment == getString(R.string.title_groceries)){
+                    //navController.navigate(R.id.groceries_to_settings)
+                    navController.navigate(GroceriesFragmentDirections.groceriesToSettings(username))
+                }
+            }
+        }
+
     }
 
+
     companion object {
-        fun newIntent(packageContext: Context, enrolledClasses:ArrayList<String>) : Intent {
+        fun newIntent(packageContext: Context, userName:String) : Intent {
             return Intent(packageContext, UserListActivity::class.java).apply {
-                //TODO: Put intent values as needed putExtra(STUDENT_CLASSES_INTENT_KEY, enrolledClasses)
+                putExtra(USER_INTENT_KEY, userName)
             }
         }
     }

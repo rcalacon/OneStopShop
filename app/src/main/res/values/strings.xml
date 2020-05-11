@@ -31,6 +31,7 @@
     <string name="user_available_message">Username is available - </string>
 
     <!-- Home Fragment -->
+    <string name="intro">Welcome </string>
 
     <!-- Groceries Fragment -->
     <string name="add_button_text">Add</string>
