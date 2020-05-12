@@ -7,9 +7,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -20,6 +19,10 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import edu.sdsu.cs.android.onestopshop.R
 import kotlinx.android.synthetic.main.fragment_groceries.*
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
+
 
 class GroceriesFragment : Fragment() {
 
@@ -91,6 +94,16 @@ class GroceriesFragment : Fragment() {
             layoutManager = viewManager
             adapter = viewAdapter
         }
+
+        search_bar.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+            override fun onQueryTextChange(newText: String?): Boolean {
+                viewAdapter.filter.filter(newText)
+                return false
+            }
+        })
     }
 
     private fun initializeGroceryList(){
@@ -114,8 +127,8 @@ class GroceriesFragment : Fragment() {
             }
     }
 
-    class GroceryListAdapter(private val myDataset: ArrayList<HashMap<String,String>>, private val addButton: Button) :
-        RecyclerView.Adapter<GroceryListAdapter.MyViewHolder>() {
+    class GroceryListAdapter(private val groceryList: ArrayList<HashMap<String,String>>, private val addButton: Button) :
+        RecyclerView.Adapter<GroceryListAdapter.MyViewHolder>(), Filterable {
 
         private val whiteRow:String = "#FFFFFF"
         private val grayRow:String = "#BBBBBB"
@@ -127,6 +140,8 @@ class GroceriesFragment : Fragment() {
         private var selectedGroceryTextView:TextView? = null
         private var selectedGroceryOriginalColor:Int = 0
 
+        var groceryFilterList = ArrayList<HashMap<String,String>>()
+
         class MyViewHolder(val textView: TextView) : RecyclerView.ViewHolder(textView)
 
         var selectedGroceryId:String
@@ -137,6 +152,10 @@ class GroceriesFragment : Fragment() {
             get() = currentGroceryName
             set(updatedGroceryName) { currentGroceryName = updatedGroceryName }
 
+        init {
+            groceryFilterList = groceryList
+        }
+
         override fun onCreateViewHolder(parent: ViewGroup,
                                         viewType: Int): GroceryListAdapter.MyViewHolder {
             val textView = LayoutInflater.from(parent.context)
@@ -145,7 +164,7 @@ class GroceriesFragment : Fragment() {
         }
 
         override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-            val groceryData = myDataset[position]
+            val groceryData = groceryFilterList[position]
             holder.textView.text = groceryData["name"]
             holder.textView.hint = groceryData["id"]
 
@@ -177,6 +196,41 @@ class GroceriesFragment : Fragment() {
             }
         }
 
+        /**
+         *  General Filtering Capability of RecyclerView was found here:
+         *  https://johncodeos.com/how-to-add-search-in-recyclerview-using-kotlin/
+         *  Minor tweaks were made for it to work with my list
+         */
+        override fun getFilter(): Filter {
+            return object : Filter() {
+                override fun performFiltering(constraint: CharSequence?): FilterResults {
+                    val charSearch = constraint.toString()
+                    if (charSearch.isEmpty()) {
+                        groceryFilterList = groceryList
+                    } else {
+                        val resultList = ArrayList<HashMap<String,String>>()
+                        for (row in groceryList) {
+                            val groceryName = row["name"]
+                            if (groceryName !== null && groceryName.toLowerCase(Locale.ROOT).contains(charSearch.toLowerCase(Locale.ROOT))) {
+                                resultList.add(row)
+                            }
+                        }
+                        groceryFilterList = resultList
+                    }
+                    val filterResults = FilterResults()
+                    filterResults.values = groceryFilterList
+                    return filterResults
+                }
+
+                @Suppress("UNCHECKED_CAST")
+                override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+                    groceryFilterList = results?.values as ArrayList<HashMap<String,String>>
+                    notifyDataSetChanged()
+                }
+
+            }
+        }
+
         fun clearSelectedGrocery(){
             currentGroceryId = ""
             currentGroceryName = ""
@@ -189,6 +243,6 @@ class GroceriesFragment : Fragment() {
             selectedGroceryOriginalColor = 0
         }
 
-        override fun getItemCount() = myDataset.size
+        override fun getItemCount() = groceryFilterList.size
     }
 }

@@ -40,6 +40,7 @@
     <string name="groceries_header">Select an item below</string>
     <string name="add_grocery_success">Successfully added grocery</string>
     <string name="add_grocery_fail">Failed to add grocery</string>
+    <string name="grocery_search_bar_hint">search for a grocery item</string>
 
     <!-- Settings Fragment -->
     <string name="reset_data_button_text">Reset Grocery List</string>
