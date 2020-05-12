@@ -130,6 +130,8 @@ class GroceriesFragment : Fragment() {
     class GroceryListAdapter(private val groceryList: ArrayList<HashMap<String,String>>, private val addButton: Button) :
         RecyclerView.Adapter<GroceryListAdapter.MyViewHolder>(), Filterable {
 
+        class MyViewHolder(val textView: TextView) : RecyclerView.ViewHolder(textView)
+
         private val whiteRow:String = "#FFFFFF"
         private val grayRow:String = "#BBBBBB"
         private val selectedRow:String = "#5FD47E"
@@ -142,7 +144,6 @@ class GroceriesFragment : Fragment() {
 
         var groceryFilterList = ArrayList<HashMap<String,String>>()
 
-        class MyViewHolder(val textView: TextView) : RecyclerView.ViewHolder(textView)
 
         var selectedGroceryId:String
             get() = currentGroceryId

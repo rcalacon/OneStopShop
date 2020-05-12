@@ -33,6 +33,8 @@
     <!-- Home Fragment -->
     <string name="intro">Welcome </string>
     <string name="list_summary">total items:</string>
+    <string name="edit_button_text">Edit</string>
+    <string name="delete_button_text">Delete</string>
 
     <!-- Groceries Fragment -->
     <string name="add_button_text">Add</string>

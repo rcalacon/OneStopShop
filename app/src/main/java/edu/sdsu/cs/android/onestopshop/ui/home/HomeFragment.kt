@@ -1,10 +1,13 @@
 package edu.sdsu.cs.android.onestopshop.ui.home
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -68,7 +71,7 @@ class HomeFragment : Fragment() {
 
     private fun initRecyclerView(recyclerData:ArrayList<HashMap<String,String>>, numGroceries:Int){
         viewManager = LinearLayoutManager(context)
-        viewAdapter = GroceryListAdapter(recyclerData)
+        viewAdapter = GroceryListAdapter(recyclerData, edit_button, delete_button)
         recyclerView = grocery_list.apply {
             setHasFixedSize(true)
             layoutManager = viewManager
@@ -99,10 +102,28 @@ class HomeFragment : Fragment() {
             }
     }
 
-    class GroceryListAdapter(private val myDataset: ArrayList<HashMap<String,String>>) :
+    class GroceryListAdapter(private val myDataset: ArrayList<HashMap<String,String>>,
+                             private val editButton: Button,
+                             private val deleteButton: Button) :
         RecyclerView.Adapter<GroceryListAdapter.MyViewHolder>() {
 
         class MyViewHolder(val textView: TextView) : RecyclerView.ViewHolder(textView)
+        private val whiteRow:String = "#FFFFFF"
+        private val selectedRow:String = "#5FD47E"
+
+        private var currentGroceryId:String = ""
+        private var currentGroceryName:String = ""
+
+        private var selectedGroceryTextView:TextView? = null
+        private var selectedGroceryOriginalColor:Int = 0
+
+        var selectedGroceryId:String
+            get() = currentGroceryId
+            set(updatedGroceryId) { currentGroceryId = updatedGroceryId }
+
+        var selectedGroceryName:String
+            get() = currentGroceryName
+            set(updatedGroceryName) { currentGroceryName = updatedGroceryName }
 
         override fun onCreateViewHolder(parent: ViewGroup,
                                         viewType: Int): GroceryListAdapter.MyViewHolder {
@@ -116,11 +137,41 @@ class HomeFragment : Fragment() {
             holder.textView.text = groceryData["name"]
             holder.textView.hint = groceryData["id"]
 
+            holder.textView.setBackgroundColor(Color.parseColor(whiteRow))
+
             holder.textView.setOnClickListener {selectedGroceryItem ->
-                //TODO, what to do?
+                if(selectedGroceryTextView !== null && currentGroceryId == (selectedGroceryItem as TextView).hint.toString()) {
+                    editButton.setEnabled(false)
+                    deleteButton.setEnabled(false)
+
+                    selectedGroceryTextView?.setBackgroundColor(Color.parseColor(whiteRow))
+                    currentGroceryId = ""
+                    currentGroceryName = ""
+                    selectedGroceryTextView = null
+                    selectedGroceryOriginalColor = 0
+                }else{
+                    editButton.setEnabled(true)
+                    deleteButton.setEnabled(true)
+
+                    //Clear highlight of previous
+                    if(selectedGroceryTextView !== null){
+                        selectedGroceryTextView?.setBackgroundColor(selectedGroceryOriginalColor)
+                    }
+
+                    //update tracking variables
+                    selectedGroceryTextView = selectedGroceryItem as TextView
+                    val selectedGroceryOriginalColorDrawable: ColorDrawable = selectedGroceryItem.background as ColorDrawable
+                    selectedGroceryOriginalColor = selectedGroceryOriginalColorDrawable.color
+
+                    currentGroceryId = selectedGroceryTextView?.hint.toString()
+                    currentGroceryName = selectedGroceryTextView?.text.toString()
+
+                    //highlight newly selected
+                    selectedGroceryTextView?.setBackgroundColor(Color.parseColor(selectedRow))
+                }
+
             }
         }
-
         override fun getItemCount() = myDataset.size
     }
 }
