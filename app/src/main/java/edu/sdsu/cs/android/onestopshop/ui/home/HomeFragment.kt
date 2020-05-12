@@ -144,7 +144,7 @@ class HomeFragment : Fragment() {
                     editButton.setEnabled(false)
                     deleteButton.setEnabled(false)
 
-                    selectedGroceryTextView?.setBackgroundColor(Color.parseColor(whiteRow))
+                    selectedGroceryTextView?.setBackgroundColor(selectedGroceryOriginalColor)
                     currentGroceryId = ""
                     currentGroceryName = ""
                     selectedGroceryTextView = null

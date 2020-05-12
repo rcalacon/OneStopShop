@@ -176,24 +176,33 @@ class GroceriesFragment : Fragment() {
             }
 
             holder.textView.setOnClickListener {selectedGroceryItem ->
-                addButton.setEnabled(true)
+                if(selectedGroceryTextView !== null && currentGroceryId == (selectedGroceryItem as TextView).hint.toString()) {
+                    addButton.setEnabled(false)
 
-                //Clear highlight of previous
-                if(selectedGroceryTextView !== null){
                     selectedGroceryTextView?.setBackgroundColor(selectedGroceryOriginalColor)
+                    currentGroceryId = ""
+                    currentGroceryName = ""
+                    selectedGroceryTextView = null
+                    selectedGroceryOriginalColor = 0
+                }else{
+                    addButton.setEnabled(true)
+
+                    //Clear highlight of previous
+                    if(selectedGroceryTextView !== null){
+                        selectedGroceryTextView?.setBackgroundColor(selectedGroceryOriginalColor)
+                    }
+
+                    //update tracking variables
+                    selectedGroceryTextView = selectedGroceryItem as TextView
+                    val selectedGroceryOriginalColorDrawable:ColorDrawable = selectedGroceryItem.background as ColorDrawable
+                    selectedGroceryOriginalColor = selectedGroceryOriginalColorDrawable.color
+
+                    currentGroceryId = selectedGroceryTextView?.hint.toString()
+                    currentGroceryName = selectedGroceryTextView?.text.toString()
+
+                    //highlight newly selected
+                    selectedGroceryTextView?.setBackgroundColor(Color.parseColor(selectedRow))
                 }
-
-                //update tracking variables
-                selectedGroceryTextView = selectedGroceryItem as TextView
-                val selectedGroceryOriginalColorDrawable:ColorDrawable = selectedGroceryItem.background as ColorDrawable
-                selectedGroceryOriginalColor = selectedGroceryOriginalColorDrawable.color
-
-                currentGroceryId = selectedGroceryTextView?.hint.toString()
-                currentGroceryName = selectedGroceryTextView?.text.toString()
-
-                //highlight newly selected
-                selectedGroceryTextView?.setBackgroundColor(Color.parseColor(selectedRow))
-
             }
         }
 
