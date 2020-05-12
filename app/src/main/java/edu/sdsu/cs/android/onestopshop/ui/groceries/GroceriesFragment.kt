@@ -19,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import edu.sdsu.cs.android.onestopshop.R
-import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.fragment_groceries.*
 
 class GroceriesFragment : Fragment() {
@@ -111,7 +110,7 @@ class GroceriesFragment : Fragment() {
             }
             .addOnFailureListener { exception ->
                 Log.w("RCA", "Error getting documents.", exception)
-                login_progress.visibility = View.INVISIBLE
+                grocery_progress.visibility = View.INVISIBLE
             }
     }
 

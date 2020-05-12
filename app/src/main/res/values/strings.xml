@@ -32,6 +32,7 @@
 
     <!-- Home Fragment -->
     <string name="intro">Welcome </string>
+    <string name="list_summary">total items:</string>
 
     <!-- Groceries Fragment -->
     <string name="add_button_text">Add</string>
