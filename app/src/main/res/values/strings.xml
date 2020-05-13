@@ -5,6 +5,8 @@
     <string name="title_groceries">Groceries</string>
     <string name="title_settings">Settings</string>
 
+    <string name="under_construction">This feature currently is under construction!</string>
+
     <!-- Used to parse grocery file data -->
     <string name="grocery_data_delimiter"> $ </string>
 
@@ -47,5 +49,7 @@
     <string name="grocery_search_bar_hint">search for a grocery item</string>
 
     <!-- Settings Fragment -->
-    <string name="reset_data_button_text">Reset Grocery List</string>
+    <string name="reset_data_button_text">Clear Custom Groceries</string>
+    <string name="duration_button_text">Notification Settings</string>
+    <string name="dark_theme">dark theme</string>
 </resources>

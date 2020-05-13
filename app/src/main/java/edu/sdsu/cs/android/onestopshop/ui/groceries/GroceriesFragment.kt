@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import edu.sdsu.cs.android.onestopshop.R
@@ -57,6 +58,12 @@ class GroceriesFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         grocery_progress.visibility = View.VISIBLE
         initializeGroceryList()
+
+        create_button.setOnClickListener {
+            val underConstructionSnackbar: Snackbar = Snackbar.make(it, R.string.under_construction, Snackbar.LENGTH_SHORT)
+            underConstructionSnackbar.view.setBackgroundColor(Color.parseColor("#777700"))
+            underConstructionSnackbar.show()
+        }
 
         add_button.setOnClickListener{
             grocery_progress.visibility = View.VISIBLE

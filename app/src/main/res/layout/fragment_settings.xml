@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -10,22 +9,81 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:drawable/dialog_holo_light_frame"
-        android:textSize="20sp"
+        android:gravity="center_horizontal"
         android:paddingTop="15dp"
         android:paddingBottom="15dp"
         android:textAlignment="center"
-        android:gravity="center_horizontal"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/reset_button"
+
+    <LinearLayout
+        android:id="@+id/groceries_container"
+        style="?android:attr/buttonBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/reset_data_button_text"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@android:drawable/dialog_holo_light_frame"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/guideline5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_settings" />
+        app:layout_constraintTop_toBottomOf="@+id/text_settings">
+
+        <Switch
+            android:id="@+id/dark_theme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:text="@string/dark_theme"
+            android:textColor="@color/under_construction"
+            android:textSize="15sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            app:layout_constraintTop_toTopOf="@+id/button_container" />
+
+        <Button
+            android:id="@+id/duration_button"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="208dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:text="@string/duration_button_text"
+            android:textColor="@color/under_construction" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            app:layout_constraintTop_toTopOf="@+id/button_container" />
+
+        <Button
+            android:id="@+id/reset_button"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="209dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:text="@string/reset_data_button_text"
+            android:textColor="@color/under_construction" />
+
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="469dp" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
