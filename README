@@ -1,0 +1,66 @@
+************************************************************
+1. Team of one
+Name  - Rodney Alacon
+RedID - 812138191
+
+************************************************************
+2. Project Description
+My CS646 Final Project is called OneStopShop, a phone application meant for users to create grocery
+lists to be used when visiting the market. Users can select an item from a pre defined list of
+groceries to add it to his/her own personal list. Users can also delete items from his/her list and
+search for specific items in the fully populated grocery list. There are 826 items total.
+
+Users can only see items they've selected from the grocery list.
+
+I got the grocery list data from kaggle - https://www.kaggle.com/prashantk93/inventory-data-for-grocery
+Some further massaging was done to the data in order for it to be usable (deleted some duplicates,
+added UIDs for personal use). I also ended up using only column E from the data set, which is the
+product name.
+
+A combination of UI design, progress bars, toasts and snackbars are used to provide the user more
+information.
+
+************************************************************
+3. Special Instructions
+On startup the application will take the grocery list data from the saved file in the /res/raw
+directory. It will then write all of this information into the firebase db. This may take a while
+but the application will inform you of it's progress. This only happens once and a subsequent
+application restart should be much faster.
+
+You need to register for an account to see the full capabilities. I will stage the database so no
+accounts will be made and you should be able to create any username you want. The application checks
+ if the user exists before and when you submit the registration form. Credentials get stored in
+ firebase db.
+
+The application also verifies credentials when logging in.
+
+************************************************************
+4. Third party libraries
+N/A
+
+************************************************************
+5. Known Issues
+No known issues, but the following capabilities are listed as "under construction". When interacting
+ with these items in the app, a Snackbar will display telling the user the feature is under
+ construction.
+
+*** Home Fragment ***
+Edit Button - I would like to one day support the ability to edit a grocery for further
+customization. A potential edit feature could be to provide the duration of the grocery, so the app
+can notify you when you are almost out (maybe by a push notification). The list can also then be
+color coded to tell you if you are running out or not (e.g. red row = 1 day away from running out)
+
+*** Groceries Fragment ***
+Create Button - I would like to have a user be given the ability to create a custom grocery, in case
+ it doesn't currently exist in the predefined list provided
+
+*** Settings Fragment ***
+Dark Theme Switch - Fairly self explanitory, but I'd like to support the trendy dark theme
+
+Notification Settings - Based off of the Edit Button feature above, I'd like users to configure when
+ the app should let them know they are running low on groceries. (e.g. 2 days from now)
+
+Clear Custom Groceries - Based off of the Create Button feature above, I'd like users to manage
+their custom groceries by removing ones that are no longer needed.
+
+I'd also like to support landscape views.
