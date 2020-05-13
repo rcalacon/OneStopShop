@@ -2,7 +2,6 @@ package edu.sdsu.cs.android.onestopshop.ui.settings
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,14 +9,9 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import edu.sdsu.cs.android.onestopshop.R
 import kotlinx.android.synthetic.main.fragment_settings.*
-import java.io.BufferedReader
-import java.io.InputStream
 
 class SettingsFragment : Fragment() {
 

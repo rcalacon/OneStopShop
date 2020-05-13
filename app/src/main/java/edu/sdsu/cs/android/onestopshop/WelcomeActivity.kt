@@ -1,6 +1,5 @@
 package edu.sdsu.cs.android.onestopshop
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -58,7 +57,7 @@ class WelcomeActivity : AppCompatActivity() {
                                 }
                             }
                             .addOnFailureListener { e ->
-                                Log.w("RCA", "Error adding document", e)
+                                Log.w("RCA", "Error adding grocery from initialization list", e)
                             }
                         grocery = groceriesBufferedReader.readLine()
                     }
@@ -70,26 +69,21 @@ class WelcomeActivity : AppCompatActivity() {
                     // set grocery list initialized state to true
                     db.collection("init")
                         .add(initMap)
-                        .addOnSuccessListener { documentReference ->
-                            Log.d("RCA", "DocumentSnapshot added with ID: ${documentReference.id}")
-                        }
                         .addOnFailureListener { e ->
-                            Log.w("RCA", "Error adding document", e)
+                            Log.w("RCA", "Error adding initialization information", e)
                         }
                 } else {
-                    val loginIntent = LoginActivity.newIntent(this@WelcomeActivity,
-                        ArrayList())
+                    val loginIntent = LoginActivity.newIntent(this@WelcomeActivity)
                     startActivity(loginIntent)
                     finish()
                 }
             }
             .addOnFailureListener { exception ->
-                Log.e("RCA", "Error getting documents.", exception)
+                Log.e("RCA", "Error getting initialization information.", exception)
             }
 
         next_button.setOnClickListener {
-            val loginIntent = LoginActivity.newIntent(this@WelcomeActivity,
-                ArrayList())
+            val loginIntent = LoginActivity.newIntent(this@WelcomeActivity)
             startActivity(loginIntent)
             finish()
         }

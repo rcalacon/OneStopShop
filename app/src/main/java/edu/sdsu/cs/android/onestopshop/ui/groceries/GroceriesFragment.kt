@@ -133,7 +133,7 @@ class GroceriesFragment : Fragment() {
                 initRecyclerView(recyclerData)
             }
             .addOnFailureListener { exception ->
-                Log.w("RCA", "Error getting documents.", exception)
+                Log.w("RCA", "Error getting groceries.", exception)
                 grocery_progress.visibility = View.INVISIBLE
             }
     }

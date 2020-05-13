@@ -64,8 +64,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         register_button.setOnClickListener {
-            val registerIntent = RegisterActivity.newIntent(this@LoginActivity,
-                ArrayList())
+            val registerIntent = RegisterActivity.newIntent(this@LoginActivity)
             startActivity(registerIntent)
         }
     }
@@ -96,7 +95,7 @@ class LoginActivity : AppCompatActivity() {
                 login_progress.visibility = View.INVISIBLE
             }
             .addOnFailureListener { exception ->
-                Log.w("RCA", "Error getting documents.", exception)
+                Log.w("RCA", "Error verifying credentials.", exception)
                 login_progress.visibility = View.INVISIBLE
             }
     }
@@ -106,10 +105,8 @@ class LoginActivity : AppCompatActivity() {
     }
 
     companion object {
-        fun newIntent(packageContext: Context, enrolledClasses:ArrayList<String>) : Intent {
-            return Intent(packageContext, LoginActivity::class.java).apply {
-                //TODO: Put intent values as needed putExtra(STUDENT_CLASSES_INTENT_KEY, enrolledClasses)
-            }
+        fun newIntent(packageContext: Context) : Intent {
+            return Intent(packageContext, LoginActivity::class.java)
         }
     }
 }

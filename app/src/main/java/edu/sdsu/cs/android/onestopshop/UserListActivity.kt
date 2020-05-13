@@ -3,14 +3,8 @@ package edu.sdsu.cs.android.onestopshop
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.NavGraph
 import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
-import edu.sdsu.cs.android.onestopshop.ui.groceries.GroceriesFragment
 import edu.sdsu.cs.android.onestopshop.ui.groceries.GroceriesFragmentDirections
 import edu.sdsu.cs.android.onestopshop.ui.home.HomeFragmentDirections
 import edu.sdsu.cs.android.onestopshop.ui.settings.SettingsFragmentDirections

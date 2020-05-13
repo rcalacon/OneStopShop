@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.EditText
-import android.widget.Toast
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_register.*
@@ -83,10 +82,10 @@ class RegisterActivity : AppCompatActivity() {
                             .addOnSuccessListener { documentReference ->
                                 registration_in_progress.visibility = View.GONE
                                 registration_complete.visibility = View.VISIBLE
-                                Log.d("RCA", "DocumentSnapshot added with ID: ${documentReference.id}")
+                                Log.d("RCA", "Added new user with ID: ${documentReference.id}")
                             }
                             .addOnFailureListener { e ->
-                                Log.w("RCA", "Error adding document", e)
+                                Log.w("RCA", "Error adding new user", e)
                             }
                     }else{
                         username_register_field.background = null
@@ -96,15 +95,13 @@ class RegisterActivity : AppCompatActivity() {
                 }
             }
             .addOnFailureListener { exception ->
-                Log.w("RCA", "Error getting documents.", exception)
+                Log.w("RCA", "Error checking if user exists.", exception)
             }
     }
 
     companion object {
-        fun newIntent(packageContext: Context, enrolledClasses:ArrayList<String>) : Intent {
-            return Intent(packageContext, RegisterActivity::class.java).apply {
-                //TODO: Put intent values as needed putExtra(STUDENT_CLASSES_INTENT_KEY, enrolledClasses)
-            }
+        fun newIntent(packageContext: Context) : Intent {
+            return Intent(packageContext, RegisterActivity::class.java)
         }
     }
 }

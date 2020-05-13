@@ -137,7 +137,6 @@ class HomeFragment : Fragment() {
             .whereEqualTo("owner", username)
             .get()
             .addOnSuccessListener { result ->
-                //var recyclerData:ArrayList<HashMap<String,String>> = ArrayList()
                 for (grocery in result) {
                     val currentGroceryItem = grocery.data
                     val recyclerItem:HashMap<String,String> = HashMap()
