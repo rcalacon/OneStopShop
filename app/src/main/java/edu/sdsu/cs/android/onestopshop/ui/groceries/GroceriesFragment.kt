@@ -2,6 +2,7 @@ package edu.sdsu.cs.android.onestopshop.ui.groceries
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -74,6 +75,7 @@ class GroceriesFragment : Fragment() {
                     ).show()
                     grocery_progress.visibility = View.GONE
                     viewAdapter.clearSelectedGrocery()
+                    add_button.setEnabled(false)
                 }
                 .addOnFailureListener { e ->
                     Toast.makeText(
@@ -87,8 +89,10 @@ class GroceriesFragment : Fragment() {
     }
 
     private fun initRecyclerView(recyclerData:ArrayList<HashMap<String,String>>){
+        val selectedItemBackground = resources.getDrawable(R.drawable.selected_grocery_item)
+
         viewManager = LinearLayoutManager(context)
-        viewAdapter = GroceryListAdapter(recyclerData, add_button)
+        viewAdapter = GroceryListAdapter(recyclerData, add_button, selectedItemBackground)
         recyclerView = grocery_list.apply {
             setHasFixedSize(true)
             layoutManager = viewManager
@@ -127,14 +131,14 @@ class GroceriesFragment : Fragment() {
             }
     }
 
-    class GroceryListAdapter(private val groceryList: ArrayList<HashMap<String,String>>, private val addButton: Button) :
+    class GroceryListAdapter(private val groceryList: ArrayList<HashMap<String,String>>,
+                             private val addButton: Button,
+                             private val selectedItemBackground: Drawable) :
         RecyclerView.Adapter<GroceryListAdapter.MyViewHolder>(), Filterable {
 
         class MyViewHolder(val textView: TextView) : RecyclerView.ViewHolder(textView)
 
         private val whiteRow:String = "#FFFFFF"
-        private val grayRow:String = "#BBBBBB"
-        private val selectedRow:String = "#5FD47E"
 
         private var currentGroceryId:String = ""
         private var currentGroceryName:String = ""
@@ -168,17 +172,13 @@ class GroceriesFragment : Fragment() {
             val groceryData = groceryFilterList[position]
             holder.textView.text = groceryData["name"]
             holder.textView.hint = groceryData["id"]
-
-            if(position % 2 == 0){
-                holder.textView.setBackgroundColor(Color.parseColor(whiteRow))
-            }else{
-                holder.textView.setBackgroundColor(Color.parseColor(grayRow))
-            }
+            holder.textView.setBackgroundColor(Color.parseColor(whiteRow))
 
             holder.textView.setOnClickListener {selectedGroceryItem ->
                 if(selectedGroceryTextView !== null && currentGroceryId == (selectedGroceryItem as TextView).hint.toString()) {
                     addButton.setEnabled(false)
 
+                    selectedGroceryTextView?.background = null
                     selectedGroceryTextView?.setBackgroundColor(selectedGroceryOriginalColor)
                     currentGroceryId = ""
                     currentGroceryName = ""
@@ -189,6 +189,7 @@ class GroceriesFragment : Fragment() {
 
                     //Clear highlight of previous
                     if(selectedGroceryTextView !== null){
+                        selectedGroceryTextView?.background = null
                         selectedGroceryTextView?.setBackgroundColor(selectedGroceryOriginalColor)
                     }
 
@@ -201,7 +202,7 @@ class GroceriesFragment : Fragment() {
                     currentGroceryName = selectedGroceryTextView?.text.toString()
 
                     //highlight newly selected
-                    selectedGroceryTextView?.setBackgroundColor(Color.parseColor(selectedRow))
+                    selectedGroceryTextView?.background = selectedItemBackground
                 }
             }
         }
@@ -246,6 +247,7 @@ class GroceriesFragment : Fragment() {
             currentGroceryName = ""
 
             if(selectedGroceryTextView !== null){
+                selectedGroceryTextView?.background = null
                 selectedGroceryTextView?.setBackgroundColor(selectedGroceryOriginalColor)
                 selectedGroceryTextView = null
             }

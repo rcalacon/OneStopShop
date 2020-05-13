@@ -2,6 +2,7 @@ package edu.sdsu.cs.android.onestopshop.ui.home
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -32,6 +34,8 @@ class HomeFragment : Fragment() {
     private lateinit var viewAdapter: GroceryListAdapter
     private lateinit var viewManager: RecyclerView.LayoutManager
 
+    private var userItems: ArrayList<HashMap<String,String>> = ArrayList()
+
     val args: HomeFragmentArgs by navArgs()
 
     override fun onCreateView(
@@ -54,6 +58,7 @@ class HomeFragment : Fragment() {
             if(username !== null){
                 this.username = username
                 homeViewModel.text.value = getString(R.string.intro).toLowerCase() + " " + username.toLowerCase()
+
             }
         }else if(args !== null){
             val username:String = args.username
@@ -67,11 +72,51 @@ class HomeFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         grocery_progress.visibility = View.VISIBLE
         initializeGroceryList(username)
+
+        delete_button.setOnClickListener {
+            grocery_progress.visibility = View.VISIBLE
+            db.collection("items")
+                .document(viewAdapter.selectedGroceryId)
+                .delete()
+                .addOnSuccessListener { result ->
+                    var recyclerItemToDeleteIndex:Int? = null
+                    for(userItemIndex in 0 until userItems.size){
+                        if(userItems[userItemIndex]["id"] == viewAdapter.selectedGroceryId){
+                            recyclerItemToDeleteIndex = userItemIndex
+                        }
+                    }
+                    if(recyclerItemToDeleteIndex !== null){
+                        val newItemCount:Int = viewAdapter.removeAt(recyclerItemToDeleteIndex)
+                        list_summary.text = (getString(R.string.list_summary) + " " + newItemCount).toLowerCase()
+                        delete_button.setEnabled(false)
+                    }
+
+                    Toast.makeText(
+                        activity,
+                        (getString(R.string.delete_grocery_success) + "\n" + viewAdapter.selectedGroceryName).toLowerCase(),
+                        Toast.LENGTH_LONG
+                    ).show()
+                    grocery_progress.visibility = View.INVISIBLE
+                    viewAdapter.clearSelectedGrocery()
+                }
+                .addOnFailureListener {
+                    Toast.makeText(
+                        activity,
+                        (getString(R.string.delete_grocery_fail) + "\n" + viewAdapter.selectedGroceryName).toLowerCase(),
+                        Toast.LENGTH_LONG
+                    ).show()
+                    grocery_progress.visibility = View.INVISIBLE
+                }
+
+
+        }
     }
 
     private fun initRecyclerView(recyclerData:ArrayList<HashMap<String,String>>, numGroceries:Int){
+        val selectedItemBackground = resources.getDrawable(R.drawable.selected_grocery_item)
+
         viewManager = LinearLayoutManager(context)
-        viewAdapter = GroceryListAdapter(recyclerData, edit_button, delete_button)
+        viewAdapter = GroceryListAdapter(recyclerData, edit_button, delete_button, selectedItemBackground)
         recyclerView = grocery_list.apply {
             setHasFixedSize(true)
             layoutManager = viewManager
@@ -85,16 +130,16 @@ class HomeFragment : Fragment() {
             .whereEqualTo("owner", username)
             .get()
             .addOnSuccessListener { result ->
-                var recyclerData:ArrayList<HashMap<String,String>> = ArrayList()
+                //var recyclerData:ArrayList<HashMap<String,String>> = ArrayList()
                 for (grocery in result) {
                     val currentGroceryItem = grocery.data
                     val recyclerItem:HashMap<String,String> = HashMap()
                     recyclerItem["name"] = currentGroceryItem["name"] as String
-                    recyclerItem["id"] = currentGroceryItem["id"] as String
-                    recyclerData.add(recyclerItem)
+                    recyclerItem["id"] = grocery.id
+                    userItems.add(recyclerItem)
                 }
                 grocery_progress.visibility = View.GONE
-                initRecyclerView(recyclerData, result.size())
+                initRecyclerView(userItems, result.size())
             }
             .addOnFailureListener { exception ->
                 Log.w("RCA", "Error getting documents.", exception)
@@ -102,14 +147,14 @@ class HomeFragment : Fragment() {
             }
     }
 
-    class GroceryListAdapter(private val myDataset: ArrayList<HashMap<String,String>>,
+    class GroceryListAdapter(private val userItemsDataset: ArrayList<HashMap<String,String>>,
                              private val editButton: Button,
-                             private val deleteButton: Button) :
+                             private val deleteButton: Button,
+                             private val selectedItemBackground: Drawable) :
         RecyclerView.Adapter<GroceryListAdapter.MyViewHolder>() {
 
         class MyViewHolder(val textView: TextView) : RecyclerView.ViewHolder(textView)
         private val whiteRow:String = "#FFFFFF"
-        private val selectedRow:String = "#5FD47E"
 
         private var currentGroceryId:String = ""
         private var currentGroceryName:String = ""
@@ -133,28 +178,27 @@ class HomeFragment : Fragment() {
         }
 
         override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-            val groceryData = myDataset[position]
+            val groceryData = userItemsDataset[position]
             holder.textView.text = groceryData["name"]
             holder.textView.hint = groceryData["id"]
-
             holder.textView.setBackgroundColor(Color.parseColor(whiteRow))
 
             holder.textView.setOnClickListener {selectedGroceryItem ->
                 if(selectedGroceryTextView !== null && currentGroceryId == (selectedGroceryItem as TextView).hint.toString()) {
-                    editButton.setEnabled(false)
                     deleteButton.setEnabled(false)
 
+                    selectedGroceryTextView?.background = null
                     selectedGroceryTextView?.setBackgroundColor(selectedGroceryOriginalColor)
                     currentGroceryId = ""
                     currentGroceryName = ""
                     selectedGroceryTextView = null
                     selectedGroceryOriginalColor = 0
                 }else{
-                    editButton.setEnabled(true)
                     deleteButton.setEnabled(true)
 
                     //Clear highlight of previous
                     if(selectedGroceryTextView !== null){
+                        selectedGroceryTextView?.background = null
                         selectedGroceryTextView?.setBackgroundColor(selectedGroceryOriginalColor)
                     }
 
@@ -167,11 +211,32 @@ class HomeFragment : Fragment() {
                     currentGroceryName = selectedGroceryTextView?.text.toString()
 
                     //highlight newly selected
-                    selectedGroceryTextView?.setBackgroundColor(Color.parseColor(selectedRow))
+                    selectedGroceryTextView?.background = selectedItemBackground
                 }
 
             }
         }
-        override fun getItemCount() = myDataset.size
+
+        fun clearSelectedGrocery(){
+            currentGroceryId = ""
+            currentGroceryName = ""
+
+            if(selectedGroceryTextView !== null){
+                selectedGroceryTextView?.background = null
+                selectedGroceryTextView?.setBackgroundColor(selectedGroceryOriginalColor)
+                selectedGroceryTextView = null
+            }
+
+            selectedGroceryOriginalColor = 0
+        }
+
+        fun removeAt(position:Int):Int {
+            userItemsDataset.removeAt(position)
+            notifyItemRemoved(position)
+            notifyItemRangeChanged(position, userItemsDataset.size)
+            return userItemsDataset.size
+        }
+
+        override fun getItemCount() = userItemsDataset.size
     }
 }

@@ -35,6 +35,8 @@
     <string name="list_summary">total items:</string>
     <string name="edit_button_text">Edit</string>
     <string name="delete_button_text">Delete</string>
+    <string name="delete_grocery_success">Successfully deleted grocery item</string>
+    <string name="delete_grocery_fail">Failed to delete grocery item</string>
 
     <!-- Groceries Fragment -->
     <string name="add_button_text">Add</string>
