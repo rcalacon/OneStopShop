@@ -40,9 +40,12 @@ N/A
 
 ************************************************************
 5. Known Issues
-No known issues, but the following capabilities are listed as "under construction". When interacting
- with these items in the app, a Snackbar will display telling the user the feature is under
- construction.
+Usernames are case sensitive. This means that usernames Rodney and rodney are unique. I do not think
+this is very intuitive and I plan to address this in the future.
+
+Other than that, no other known issues, but the following capabilities are listed as "under 
+construction". When interacting with these items in the app, a Snackbar will display telling 
+the user the feature is under construction.
 
 *** Home Fragment ***
 Edit Button - I would like to one day support the ability to edit a grocery for further
