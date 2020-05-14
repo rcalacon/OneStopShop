@@ -69,6 +69,15 @@ their custom groceries by removing ones that are no longer needed.
 I'd also like to support landscape views.
 
 ************************************************************
+6. Additional Information
+The target environment used for this project was the same as what was provided for the semeseter
+assignments.
+Pixel 1 Emulator
+Minimum SDK API 26
+Target API 29
+
+I have also successfully tested this application on my phone (Samsung Galaxy S8).
+
 I've pushed this project up to GitHub if you are interested. The project submission reflects the
 master branch.
 https://github.com/rcalacon/OneStopShop
