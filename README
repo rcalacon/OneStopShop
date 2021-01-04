@@ -1,10 +1,4 @@
-************************************************************
-1. Team of one
-Name  - Rodney Alacon
-RedID - 812138191
-
-************************************************************
-2. Project Description
+Project Description
 My CS646 Final Project is called OneStopShop, a phone application meant for users to create grocery
 lists to be used when visiting the market. Users can select an item from a pre defined list of
 groceries to add it to his/her own personal list. Users can also delete items from his/her list and
@@ -21,7 +15,6 @@ A combination of UI design, progress bars, toasts and snackbars are used to prov
 information.
 
 ************************************************************
-3. Special Instructions
 On startup the application will take the grocery list data from the saved file in the /res/raw
 directory. It will then write all of this information into the firebase db. This may take a while
 but the application will inform you of it's progress. This only happens once and a subsequent
@@ -35,11 +28,7 @@ accounts will be made and you should be able to create any username you want. Th
 The application also verifies credentials when logging in.
 
 ************************************************************
-4. Third party libraries
-N/A
-
-************************************************************
-5. Known Issues
+Known Issues
 Usernames are case sensitive. This means that usernames Rodney and rodney are unique. I do not think
 this is very intuitive and I plan to address this in the future.
 
@@ -75,9 +64,3 @@ assignments.
 Pixel 1 Emulator
 Minimum SDK API 26
 Target API 29
-
-I have also successfully tested this application on my phone (Samsung Galaxy S8).
-
-I've pushed this project up to GitHub if you are interested. The project submission reflects the
-master branch.
-https://github.com/rcalacon/OneStopShop
